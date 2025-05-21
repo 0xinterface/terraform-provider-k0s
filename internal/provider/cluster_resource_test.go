@@ -2,12 +2,17 @@ package provider
 
 import (
 	"fmt"
+	"os"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
 func TestAccClusterResource(t *testing.T) {
+	if os.Getenv("TERRAFORM_PROVIDER_K0S_ACCEPTANCE_TESTS") != "true" {
+		t.Skip("Skipping acceptance tests in CI environment. Set TERRAFORM_PROVIDER_K0S_ACCEPTANCE_TESTS=true to run.")
+	}
+
 	resource.Test(t, resource.TestCase{
 		PreCheck:                 func() { testAccPreCheck(t) },
 		ProtoV6ProviderFactories: testAccProtoV6ProviderFactories,

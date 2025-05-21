@@ -195,7 +195,7 @@ func (r *ClusterResource) Create(ctx context.Context, req resource.CreateRequest
 
 	manager := getK0sctlManagerForCreateOrUpdate(data, k0sctlConfig)
 
-	if err := manager.Run(); err != nil {
+	if err := manager.Run(ctx); err != nil {
 		resp.Diagnostics.AddError("k0sctl Error", fmt.Sprintf("Unable to create cluster, got error: %s", err))
 		return
 	}
@@ -239,7 +239,7 @@ func (r *ClusterResource) Read(ctx context.Context, req resource.ReadRequest, re
 		&k0sctl_phase.Disconnect{},
 	)
 
-	if err := manager.Run(); err != nil {
+	if err := manager.Run(ctx); err != nil {
 		resp.Diagnostics.AddError("k0sctl Error", fmt.Sprintf("Unable to read cluster, got error: %s", err))
 		return
 	}
@@ -269,7 +269,7 @@ func (r *ClusterResource) Update(ctx context.Context, req resource.UpdateRequest
 
 	manager := getK0sctlManagerForCreateOrUpdate(data, k0sctlConfig)
 
-	if err := manager.Run(); err != nil {
+	if err := manager.Run(ctx); err != nil {
 		resp.Diagnostics.AddError("k0sctl Error", fmt.Sprintf("Unable to update cluster, got error: %s", err))
 		return
 	}
@@ -324,7 +324,7 @@ func (r *ClusterResource) Delete(ctx context.Context, req resource.DeleteRequest
 		&k0sctl_phase.Disconnect{},
 	)
 
-	if err := manager.Run(); err != nil {
+	if err := manager.Run(ctx); err != nil {
 		resp.Diagnostics.AddError("k0sctl Error", fmt.Sprintf("Unable to delete cluster, got error: %s", err))
 		return
 	}
@@ -361,7 +361,7 @@ func getK0sctlManagerForCreateOrUpdate(data *ClusterResourceModel, k0sctlConfig 
 		&k0sctl_phase.ValidateHosts{},
 		&k0sctl_phase.GatherK0sFacts{},
 		&k0sctl_phase.ValidateFacts{},
-		&k0sctl_phase.UploadBinaries{},
+		// &k0sctl_phase.UploadBinaries{},
 		&k0sctl_phase.DownloadK0s{},
 		&k0sctl_phase.InstallBinaries{},
 		&k0sctl_phase.PrepareArm{},
